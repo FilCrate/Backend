@@ -11,6 +11,24 @@ module.exports = {
       name: {
         type: Sequelize.STRING
       },
+      image: {
+        type: Sequelize.BLOB
+      },
+      price: {
+        type: Sequelize.DECIMAL
+      },
+      rating: {
+        type: Sequelize.DECIMAL
+      },
+      stock: {
+        type: Sequelize.INTEGER
+      },
+      category: {
+        type: Sequelize.STRING
+      },
+      weight: {
+        type: Sequelize.DECIMAL
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
