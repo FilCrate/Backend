@@ -1,0 +1,33 @@
+{
+  "name": "filcrate",
+  "version": "1.0.0",
+  "description": "filcrate backend code",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FilCrate/Backend.git"
+  },
+  "author": "Chris Panican",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FilCrate/Backend/issues"
+  },
+  "homepage": "https://github.com/FilCrate/Backend#readme",
+  "devDependencies": {
+    "jest": "^21.2.1"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.3",
+    "express-handlebars": "^3.0.0",
+    "nodemon": "^1.17.2",
+    "passport": "^0.4.0",
+    "pg": "^7.4.1",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^4.37.4",
+    "sequelize-cli": "^4.0.0"
+  }
+}
