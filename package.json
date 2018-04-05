@@ -10,7 +10,11 @@
     "type": "git",
     "url": "git+https://github.com/FilCrate/Backend.git"
   },
-  "author": "Chris Panican",
+  "contributors": [
+    "Chris Panican",
+    "Abigail Banting",
+    "Nhi Tran"
+  ],
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/FilCrate/Backend/issues"
