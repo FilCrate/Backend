@@ -15,7 +15,7 @@ For mac, run `brew install postgresql` on terminal
 
 `createdb -h localhost -U filcrate filcrate_dev`
 
-5. More information can be found at this [link](https//github.com/CUNYTechPrep/ctp2017/blob/master/guides/installing-postgresql.md/).
+5. More information can be found at this [link](https://github.com/CUNYTechPrep/ctp2017/blob/master/guides/installing-postgresql.md).
 
 ## How to run
 1. Clone this repository.
