@@ -22,12 +22,21 @@ For mac, run `brew install postgresql` on terminal
 
 Note: Make sure postgresql is running
 
+### Method 1:
+
 1. Clone this repository.
 2. Run the migrations `node_modules/.bin/sequelize db:migrate`. This will create the tables in our database.
 3. Run the seeders `node_modules/.bin/sequelize db:seed:all`. This will create a mock data in our tables.
-4. Run the scraping tool.
+4. Run the scraping tool. Navigate to scraper directory and run `node scrape.js`
 5. `cd backend`
 6. `npm start`
+
+### Method 2:
+
+1. Clone this repository.
+2. `cd backend`
+3. `npm start`
+4. Run the scraping tool. Navigate to scraper directory and run `node scrape.js`
 
 ## Dependencies
 
@@ -35,3 +44,7 @@ Note: Make sure postgresql is running
 2. Passport
 3. Postgres
 4. Sequelize
+
+## Helpful Resources
+
+[CTP Backend Starter Code](https://github.com/CUNYTechPrep/week-06-projects/tree/master/backend-starter-code)
