@@ -7,6 +7,7 @@ const ProductsController = {
         const router = express.Router();
 
         router.get('/', this.index);
+        router.get('/:id', this.indexId)
         router.post('/', this.create);
         router.put('/:id', this.update);
         router.delete('/:id', this.delete);
@@ -14,8 +15,16 @@ const ProductsController = {
         return router;
     },
     index(req, res) {
-        res.json({
-        msg: "Successful GET to '/products' route"
+        models.Products.findAll()
+        .then(result => {
+            res.json(result);
+        });
+    },
+    indexId(req, res) {
+        let id = parseInt(req.params.id)
+        models.Products.findById(id)
+        .then(result => {
+            res.json(result);
         });
     },
     create(req, res) {
