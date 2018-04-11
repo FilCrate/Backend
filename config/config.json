@@ -2,7 +2,7 @@
   "development": {
     "username": "filcrate",
     "password": "password",
-    "database": "filcrate_dev",
+    "database": "filcrate_db",
     "host": "127.0.0.1",
     "dialect": "postgresql"
   },
