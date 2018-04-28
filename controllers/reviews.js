@@ -6,22 +6,35 @@ const ReviewsController = {
     registerRouter() {
         const router = express.Router();
 
-        router.get('/', this.index);
-        router.post('/', this.create);
+        router.get('/:id', this.index);
+        router.post('/:id', this.create);
         router.put('/:id', this.update);
         router.delete('/:id', this.delete);
 
         return router;
     },
+    // Get all reviews for specific product
     index(req, res) {
-        res.json({
-        msg: "Successful GET to '/reviews' route"
+        let id = parseInt(req.params.id);
+        models.Reviews.findAll({
+            where: {
+                product_id: { id }
+            }
+        }).then(result => {
+            res.json(result);
+        }).catch(error => {
+            console.error("Error!");
+            console.error(error);
+            res.status(500).end();
         });
     },
+    // Create a review for a product
     create(req, res) {
+        let { review } = req.body;
         res.json({
-        msg: "Successful POST to '/reviews' route"
-        });
+            msg: "Successful POST to '/reviews' route",
+            id: req.params.id
+        })
     },
     update(req, res) {
         res.json({

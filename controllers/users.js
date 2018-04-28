@@ -7,6 +7,7 @@ const UsersController = {
         const router = express.Router();
 
         router.get('/', this.index);
+        router.get('/:username', this.getUser);
         router.post('/', this.create);
         router.put('/:id', this.update);
         router.delete('/:id', this.delete);
@@ -14,14 +15,49 @@ const UsersController = {
         return router;
     },
     index(req, res) {
-        res.json({
-        msg: "Successful GET to '/users' route"
+        return models.Users.findAll();
+    },
+    getUser(req, res) {
+        let username = (req.params.username);
+        models.Users.findAll({
+            where: {
+                username: {
+                    $or: [
+                        {$like: '%' (username) + '%'},
+                        {$like: (username) + '%'},
+                        {$like: '%' + (title)}
+                    ]
+                }
+            }
+        }).then(result => {
+            res.json(result);
+        }).catch(error => {
+            console.error("Error!");
+            console.error(error);
+            res.status(500).end();
         });
     },
     create(req, res) {
-        res.json({
-        msg: "Successful POST to '/users' route"
-        });
+        let { user } = req.query;
+        let { email } = req.query;
+        models.Users.findAll({
+            where: {
+                $or: [
+                    {
+                        username: {$like: (user)}
+                    },
+                    {
+                        email: {$like: (email)}
+                    }
+                ]
+            }
+        }).then(result => {
+            res.json(result);
+        }).catch(error => {
+            console.error("Error!");
+            console.error(error);
+            res.status(500).end();
+        })
     },
     update(req, res) {
         res.json({
@@ -30,10 +66,10 @@ const UsersController = {
         });
     },
     delete(req, res) {
-        res.json({
-        msg: "Successful DELETE to '/users' route",
-        id: req.params.id
-        });
+        let id = parseInt(req.params.id);
+        return models.Users.destroy({
+            where: { id }
+        })
     },
 };
 
