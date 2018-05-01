@@ -18,7 +18,7 @@ const ProductsController = {
     },
     // Display all products
     index(req, res) {
-        models.Products.findAll()
+        return models.Products.findAll()
         .then(result => {
             res.json(result);
         });
@@ -26,7 +26,7 @@ const ProductsController = {
     // Display specific product by id
     indexId(req, res) {
         let id = parseInt(req.params.id)
-        models.Products.findById(id)
+        return models.Products.findById(id)
         .then(result => {
             res.json(result);
         });
@@ -35,7 +35,7 @@ const ProductsController = {
     category(req, res) {
         let category = req.params.category;
         console.log(category);
-        models.Products.findAll({
+        return models.Products.findAll({
             where: {
                 category: {
                     $or: [
@@ -58,7 +58,7 @@ const ProductsController = {
     search(req, res) {
         let { title, category } = req.query;
         if (category) {
-            models.Products.findAll({
+            return models.Products.findAll({
                 where: {
                     $and: [
                         {
@@ -85,7 +85,7 @@ const ProductsController = {
                 res.status(500).end();
             });
         } else {
-            models.Products.findAll({
+            return models.Products.findAll({
                 where: {
                     name: {
                         $or: [
@@ -107,17 +107,43 @@ const ProductsController = {
     },
     // Create product entry
     create(req, res) {
-        res.json({
-        msg: "Successful POST to '/products' route"
-        });
+        let {name, image, price, stock, category, weight, sku} = req.body;
+        let rating = 0;
+        price = price ? parseInt(price) : price;
+        return models.Products.create({
+            name, image, price, rating, stock, category, weight, sku
+        })
+        .then(() => {
+            res.json({
+                msg: "Entry created"
+            })
+        })
+        .catch(error => {
+            console.log("Error!");
+            console.error(error);
+            res.status(500).end();
+        })
     },
     // Update product entry
     update(req, res) {
         let id = parseInt(req.params.id);
-        res.json({
-        msg: "Successful PUT to '/products' route",
-        id: req.params.id
-        });
+        let {name, image, price, stock, category, weight, sku} = req.body;
+        return models.Products.update({
+            name, image, price, stock, category, weight, sku
+        }, {
+            where: {id}
+        })
+        .then(() => {
+            res.json({
+                msg: "Entry updated",
+                id: req.params.id
+            })
+        })
+        .catch(error => {
+            console.log("Error!");
+            console.error(error);
+            res.status(500).end();
+        })
     },
     // Delete product entry
     delete(req, res) {

@@ -2,6 +2,21 @@ const express = require('express');
 const models = require('../models');
 
 
+function checkDuplicate(username, email) {
+    return models.Users.count({
+        where: {
+            $or: [
+                {
+                    email: {$like: (email)}
+                },
+                {
+                    username: {$like: (username)}
+                }
+            ]
+        }
+    })
+}
+
 const UsersController = {
     registerRouter() {
         const router = express.Router();
@@ -9,23 +24,30 @@ const UsersController = {
         router.get('/', this.index);
         router.get('/:username', this.getUser);
         router.post('/', this.create);
-        router.put('/:id', this.update);
-        router.delete('/:id', this.delete);
+        router.put('/:username', this.update);
+        router.delete('/:username', this.delete);
 
         return router;
     },
+
+    // List All users
     index(req, res) {
-        return models.Users.findAll();
+        return models.Users.findAll()
+        .then(users => {
+            res.json(users);
+        });
     },
+
+    // Get a username
     getUser(req, res) {
         let username = (req.params.username);
-        models.Users.findAll({
+        return models.Users.findAll({
             where: {
                 username: {
                     $or: [
-                        {$like: '%' (username) + '%'},
+                        {$like: '%' + (username) + '%'},
                         {$like: (username) + '%'},
-                        {$like: '%' + (title)}
+                        {$like: '%' + (username)}
                     ]
                 }
             }
@@ -37,39 +59,94 @@ const UsersController = {
             res.status(500).end();
         });
     },
+
+    // Create a user
     create(req, res) {
-        let { user } = req.query;
-        let { email } = req.query;
-        models.Users.findAll({
-            where: {
-                $or: [
-                    {
-                        username: {$like: (user)}
-                    },
-                    {
-                        email: {$like: (email)}
-                    }
-                ]
+        let { username, email, password } = req.body;
+        let role = `c`;
+        // Check for duplicates
+        checkDuplicate(username, email).then(isUnique => {
+            if (isUnique === 0) {
+                return models.Users.create({
+                    username, email, password, role
+                }).then(() => {
+                    res.json({
+                        msg: "User Registered"
+                    })
+                })
+            } else {
+                res.json({
+                    msg: "User/email already exists!"
+                })
+                res.status(403).end();
             }
-        }).then(result => {
-            res.json(result);
-        }).catch(error => {
+        })
+        .catch(error => {
             console.error("Error!");
             console.error(error);
             res.status(500).end();
         })
     },
+
+    // Update a user
     update(req, res) {
-        res.json({
-        msg: "Successful PUT to '/users' route",
-        id: req.params.id
-        });
-    },
-    delete(req, res) {
-        let id = parseInt(req.params.id);
-        return models.Users.destroy({
-            where: { id }
+        let { username, email, password } = req.body;
+        let  oldUser  = req.params.username;
+        // Check for duplicates
+        // TODO: Need separate check duplicate user and email in update
+        checkDuplicate(username, email).then(isUnique => {
+            // if statement below is questionable 🤔
+            if ((oldUser != username) && (isUnique === 0)) {
+                return models.Users.update({
+                    username, email, password
+                }, {
+                    where: {
+                        username: {
+                            $like: (oldUser)
+                        }
+                    }
+                })
+                .then(() => {
+                    res.json({
+                        msg: "Edited User"
+                    })
+                })
+             } else {
+                res.json({
+                    msg: "User/email already exists!"
+                })
+                res.status(403).end();
+            }
         })
+        .catch(error => {
+            console.error("Error!");
+            console.error(error);
+            res.status(500).end();
+        })
+    },
+
+    // Delete a user
+    delete(req, res) {
+        let username = req.params.username;
+        return models.Users.destroy({
+            where: { 
+                username: {
+                    $like: (username)
+                }
+             }
+        })
+        .then(() => {
+            res.json({
+                msg: "Entry deleted",
+                id: req.params.id
+            });
+            res.status(204).end()
+        })
+        .catch(error => {
+            console.errpr("Error!");
+            console.error(error);
+            res.status(500).end();
+        });
     },
 };
 
