@@ -140,7 +140,7 @@ const ProductsController = {
             })
         })
         .catch(error => {
-            console.log("Error!");
+            console.error("Error!");
             console.error(error);
             res.status(500).end();
         })

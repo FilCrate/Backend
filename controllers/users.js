@@ -143,7 +143,7 @@ const UsersController = {
             res.status(204).end()
         })
         .catch(error => {
-            console.errpr("Error!");
+            console.error("Error!");
             console.error(error);
             res.status(500).end();
         });
