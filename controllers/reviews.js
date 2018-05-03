@@ -44,6 +44,15 @@ const ReviewsController = {
     // Create a review for a product
     create(req, res) {
         let { product_id, user_id, comment, rating } = req.body;
+        if ((typeof product_id === 'undefined') || (typeof user_id === 'undefined')) {
+            throw "Error, product_id or user_id is null!";
+        }
+        if ((product_id <= 0) || (user_id <= 0)) {
+            throw "Error, product_id or user_id is 0!";
+        }
+        if ((rating > 5.0) || (rating < 1.0)) {
+            throw "Error, review should be between 1.0-5.0";
+        }
         return models.Reviews.create({
             product_id, user_id, comment, rating
         })
@@ -60,8 +69,12 @@ const ReviewsController = {
         })
     },
     // Update a review for a product. Use `:id` of a product
+    // Make sure the user_id on this review is same as user_id who's editing the review
     update(req, res) {
         let { comment, rating } = req.body;
+        if ((rating > 5.0) || (rating < 1.0)) {
+            throw "Error, review should be between 1.0-5.0";
+        }
         return models.Reviews.update({
             comment, rating
         }, {
@@ -82,6 +95,7 @@ const ReviewsController = {
         })
     },
     // Delete a review for a product. Use `:id` of a product
+    // Make sure the user_id on this review is same as user_id who's editing the review
     delete(req, res) {
         let id = parseInt(req.params.id);
         return models.Reviews.destroy({

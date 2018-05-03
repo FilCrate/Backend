@@ -172,6 +172,8 @@ Get all reviews by product_id
 #### `POST /reviews/:product_id`
 Create a new review for a product.
 
+##### Example Request with product_id = 1
+
 body.json:
 
 ```json
@@ -182,6 +184,11 @@ body.json:
     "rating": 4.0
 }
 ```
+
+Note: 
+
+* Take current `user_id` from current user who is typing the review.
+* `product_id` is usually `req.params.product_id`
 
 #### `PUT /reviews/:id`
 Edit a review. Use `:id` of the entry. Users can only change the `comment` and `rating`.
