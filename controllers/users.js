@@ -1,21 +1,6 @@
 const express = require('express');
 const models = require('../models');
-
-
-function checkDuplicate(username, email) {
-    return models.Users.count({
-        where: {
-            $or: [
-                {
-                    email: {$like: (email)}
-                },
-                {
-                    username: {$like: (username)}
-                }
-            ]
-        }
-    })
-}
+const { guard } = require('./auth');
 
 const UsersController = {
     registerRouter() {
@@ -24,8 +9,8 @@ const UsersController = {
         router.get('/', this.index);
         router.get('/:username', this.getUser);
         router.post('/', this.create);
-        router.put('/:username', this.update);
-        router.delete('/:username', this.delete);
+       // router.put('/:username', guard, this.ownerGuard, this.update);
+       // router.delete('/:username', guard, this.ownerGuard, this.delete);
 
         return router;
     },
@@ -150,5 +135,19 @@ const UsersController = {
     },
 };
 
+function checkDuplicate(username, email) {
+    return models.Users.count({
+        where: {
+            $or: [
+                {
+                    email: {$like: (email)}
+                },
+                {
+                    username: {$like: (username)}
+                }
+            ]
+        }
+    })
+}
 
 module.exports = UsersController.registerRouter();
