@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const passport = require("passport");
 const passportJWT = require("passport-jwt");
+const bcrypt = require('bcrypt');
 const models = require("../models");
 
 const ExtractJwt = passportJWT.ExtractJwt;
@@ -34,15 +35,17 @@ const login = (username, password) => {
     return models.Users.findOne({
         where : { username }
     })
-    .then( result => {
+    .then(result => {
         if (result === null) {
             return {message: "Username does not exist."};
-        } else if (result.password !== password) {
-            return {message: "Invalid password."};
         } else {
-            let payload = {id: result.id};
-            let token = jwt.sign(payload, secret);
-            return {message: "ok", token};
+            if(bcrypt.compareSync(password, result.password)) {
+                let payload = {id: result.id};
+                let token = jwt.sign(payload, secret);
+                return {message: "ok", token};
+            } else {
+                return {message: "Invalid password."};
+            }
         }
     });
 }

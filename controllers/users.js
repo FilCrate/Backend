@@ -1,5 +1,6 @@
 const express = require('express');
 const models = require('../models');
+const bcrypt = require('bcrypt');
 const { guard } = require('./auth');
 
 const UsersController = {
@@ -52,13 +53,15 @@ const UsersController = {
         // Check for duplicates
         checkDuplicate(username, email).then(isUnique => {
             if (isUnique === 0) {
-                return models.Users.create({
-                    username, email, password, role
-                }).then(() => {
-                    res.json({
-                        msg: "User Registered"
+                bcrypt.hash(password, 10, function(err, hash) {
+                    return models.Users.create({
+                        username, email, "password":hash, role
+                    }).then(() => {
+                        res.json({
+                            msg: "User Registered"
+                        })
                     })
-                })
+                }); 
             } else {
                 res.json({
                     msg: "User/email already exists!"
