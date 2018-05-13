@@ -11,7 +11,6 @@ router.use(function(req, res, next) {
     next();
 });
 
-
 router.get('/', (req, res) => {
     res.json({
         msg: "Successful GET to '/' route"
@@ -22,5 +21,6 @@ router.use('/users', require('./users'));
 router.use('/products', require('./products'));
 router.use('/reviews', require('./reviews'));
 router.use('/login', require('./login'));
+router.use('/carts', require('./carts'));
 
 module.exports = router;
