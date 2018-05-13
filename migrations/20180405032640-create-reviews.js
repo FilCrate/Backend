@@ -11,8 +11,8 @@ module.exports = {
       product_id: {
         type: Sequelize.INTEGER
       },
-      user_id: {
-        type: Sequelize.INTEGER
+      username: {
+        type: Sequelize.STRING
       },
       comment: {
         type: Sequelize.TEXT

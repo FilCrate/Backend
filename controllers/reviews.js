@@ -8,7 +8,7 @@ const ReviewsController = {
 
         router.get('/', this.index);
         router.get('/:id', this.indexId);
-        router.post('/:id', this.create);
+        router.post('/:product_id', this.create);
         router.put('/:id', this.update);
         router.delete('/:id', this.delete);
 
@@ -43,23 +43,20 @@ const ReviewsController = {
     },
     // Create a review for a product
     create(req, res) {
-        let { product_id, user_id, comment, rating } = req.body;
-        if ((typeof product_id === 'undefined') || (typeof user_id === 'undefined')) {
-            throw "Error, product_id or user_id is null!";
-        }
-        if ((product_id <= 0) || (user_id <= 0)) {
-            throw "Error, product_id or user_id is 0!";
+        let { username, comment, rating } = req.body;
+        if (typeof username === 'undefined') {
+            throw "Error, username is null!";
         }
         if ((rating > 5.0) || (rating < 1.0)) {
             throw "Error, review should be between 1.0-5.0";
         }
         return models.Reviews.create({
-            product_id, user_id, comment, rating
+            "product_id":req.params.product_id, username, comment, rating
         })
         .then(() => {
             res.json({
                 msg: "Review created",
-                product_id: req.body.product_id
+                product_id: req.params.product_id
             })
         })
         .catch(error => {

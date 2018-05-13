@@ -178,8 +178,7 @@ body.json:
 
 ```json
 {
-    "product_id": 1,
-    "user_id": 1,
+    "username": "johndoe",
     "comment": "Very delicious!",
     "rating": 4.0
 }
@@ -187,8 +186,8 @@ body.json:
 
 Note: 
 
-* Take current `user_id` from current user who is typing the review.
-* `product_id` is usually `req.params.product_id`
+* Take current `username` from current user who is typing the review.
+* `product_id` is `req.params.product_id`
 
 #### `PUT /reviews/:id`
 Edit a review. Use `:id` of the entry. Users can only change the `comment` and `rating`.
@@ -210,3 +209,45 @@ body.json:
 
 #### `DELETE /reviews/:id`
 Delete a review using `:id`.
+
+------
+
+## Carts
+
+#### `GET /carts/`
+Get all carts (for testing purposes)
+
+#### `GET /carts/:username`
+Get all reviews by username
+
+##### Example Response with username = 'johndoe'
+```json
+[
+    {
+        "id": 1,
+        "username": "johndoe",
+        "product_id": 5,
+        "quantity": 2,
+        "createdAt": "2018-05-13T20:43:21.325Z",
+        "updatedAt": "2018-05-13T20:43:21.325Z"
+    }
+]
+```
+
+#### `POST /carts/`
+Create a new cart entry for a product. If the product is already in the cart, update the quantity instead.
+
+##### Example Request
+
+body.json:
+
+```json
+{
+	"username": "johndoe",
+	"product_id": 5,
+	"quantity": 2
+}
+```
+
+#### `DELETE /carts/:id`
+Delete a specific entry in the cart using `:id` of that entry.
